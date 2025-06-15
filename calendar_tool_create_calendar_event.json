@@ -1,0 +1,80 @@
+// DIVERSITY ASSESSMENT - calendar_tool_create_calendar_event.json
+// Diversity Score: 0.766 (Excellent) - Top performing example set
+// 
+// Key Metrics:
+// - Mean similarity: 0.234 (low redundancy between examples)
+// - Similarity range: 0.017 - 0.518 (good spread)
+// - High similarity pairs (>0.7): 0 (no problematic duplicates)
+// - Sample size: 15 examples
+//
+// Semantic Variation Analysis:
+// - Formality levels: formal ("schedule oil change next Tuesday morning please") to casual ("hey throw in a gym session")
+// - Event types: professional meetings, personal appointments, health visits, social events
+// - Temporal expressions: specific times, relative dates, recurring patterns
+// - Language patterns: imperatives, requests, urgent commands, conversational style
+//
+// Classification Suitability: Optimal for embedding-based tool classification
+// The low mean similarity and diverse semantic features provide robust training data
+// for distinguishing calendar creation requests from other tool categories.
+[
+  {
+    "tool_name": "calendar_tool",
+    "query": "schedule dentist appointment tomorrow"
+  },
+  {
+    "tool_name": "calendar_tool",
+    "query": "add team meeting at 2pm on Friday"
+  },
+  {
+    "tool_name": "calendar_tool",
+    "query": "remind me to call mom this weekend"
+  },
+  {
+    "tool_name": "calendar_tool",
+    "query": "quick put lunch with Sarah at noon"
+  },
+  {
+    "tool_name": "calendar_tool",
+    "query": "can you block off 3-4pm for project review?"
+  },
+  {
+    "tool_name": "calendar_tool",
+    "query": "new appointment dr smith wednesday"
+  },
+  {
+    "tool_name": "calendar_tool",
+    "query": "I need a reminder for the quarterly report deadline next Monday"
+  },
+  {
+    "tool_name": "calendar_tool",
+    "query": "book conference room meeting 10am"
+  },
+  {
+    "tool_name": "calendar_tool",
+    "query": "hey throw in a gym session at 6am tomorrow morning"
+  },
+  {
+    "tool_name": "calendar_tool",
+    "query": "set up recurring standup every weekday 9am"
+  },
+  {
+    "tool_name": "calendar_tool",
+    "query": "pencil in coffee chat Thursday afternoon"
+  },
+  {
+    "tool_name": "calendar_tool",
+    "query": "urgent: add client presentation at 4"
+  },
+  {
+    "tool_name": "calendar_tool",
+    "query": "birthday reminder for Jake on the 15th"
+  },
+  {
+    "tool_name": "calendar_tool",
+    "query": "mark calendar busy during kids soccer practice saturdays"
+  },
+  {
+    "tool_name": "calendar_tool",
+    "query": "schedule oil change next Tuesday morning please"
+  }
+]
