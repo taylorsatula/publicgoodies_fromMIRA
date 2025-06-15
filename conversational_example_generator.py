@@ -2,18 +2,72 @@
 """
 Capability-Based Conversational Example Generator
 
-Generates natural conversation examples for AI tool classification training.
-Optimized for BGE embeddings with 512 token limit through focused, concise examples.
+HOW IT WORKS:
+This script generates high-quality training examples for AI tool classification using a sophisticated
+capability-based approach designed for BGE embeddings with 512 token limits.
 
-This generator:
-1. Analyzes tools to extract distinct capabilities (turn on, turn off, dim, etc.)
-2. Generates focused examples per capability in separate API calls
-3. Validates examples with diagnostic feedback
-4. Regenerates failed clusters with specific guidance
-5. Biases toward short, typed examples for maximum semantic density
+ARCHITECTURAL OVERVIEW:
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│  Tool Analysis  │ -> │ Capability Gen  │ -> │ Validation &    │ -> │ Output Files    │
+│  (Sonnet-4)     │    │ (Opus-4 + BGE)  │    │ Retry Logic     │    │ (JSON by cap)   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
+
+DETAILED WORKFLOW:
+
+1. TOOL ANALYSIS PHASE:
+   - Uses Claude Sonnet-4 to analyze Python tool files
+   - Extracts distinct capabilities (e.g., "turn on", "turn off", "dim brightness")
+   - Identifies target objects each capability acts on
+   - Creates structured ToolAnalysis with capabilities broken down by action verbs
+
+2. PARALLEL CAPABILITY PROCESSING:
+   - Each capability processed independently with ThreadPoolExecutor
+   - Uses Claude Opus-4 with extended thinking for creative generation
+   - Generates 15 examples per capability by default
+   - Focuses on domain-specific, actionable commands
+
+3. MULTI-LAYER VALIDATION SYSTEM:
+   a) Token Length Validation:
+      - Uses BGE tokenizer to ensure ≤512 tokens per example
+      - Restarts entire generation if violations found
+   
+   b) Semantic Diversity Analysis:
+      - Uses BGE embeddings to calculate cosine similarity
+      - Measures diversity score (1 - mean_similarity)
+      - Flags high-similarity pairs (>0.7 similarity)
+   
+   c) Quality Validation via LLM:
+      - Claude Sonnet-4 validates actionability and domain-specificity
+      - Checks for generic vs specific language
+      - Ensures examples clearly invoke the target capability
+
+4. ADAPTIVE RETRY LOGIC:
+   - Up to 3 attempts per capability with progressive feedback
+   - Attempt 1: Initial generation
+   - Attempt 2: Guided feedback from validation failures
+   - Attempt 3: Enhanced feedback combining all previous attempts
+   - Selects best attempt based on combined quality+diversity score
+
+5. OUTPUT GENERATION:
+   - Saves examples grouped by capability in separate JSON files
+   - Creates summary file with statistics and file manifest
+   - Provides detailed logging of validation metrics
+
+KEY FEATURES:
+- Dual LLM strategy: Sonnet for analysis, Opus for generation
+- Token-aware generation preventing BGE embedding truncation
+- Comprehensive validation ensuring training data quality
+- Parallel processing for efficiency with sequential fallback
+- Detailed logging and metrics for monitoring generation quality
+
+OPTIMIZATION FOR BGE EMBEDDINGS:
+- Biases toward concise examples (5-10 words ideal)
+- Validates token counts using actual BGE tokenizer
+- Ensures semantic diversity to prevent embedding collapse
+- Domain-specific language to improve classification accuracy
 
 Usage:
-    python new_gen.py <tool_file_path> [--examples-per-capability 15] [--output output.json]
+    python conversational_example_generator.py <tool_file_path> [--examples-per-capability 15] [--output output_dir]
 """
 
 import json
